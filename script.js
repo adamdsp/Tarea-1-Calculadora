@@ -1,7 +1,5 @@
 const display = document.querySelector("#display");
-
 const buttons = document.querySelectorAll("button");
-
 
 buttons.forEach((item) => {
   item.onclick = () => {
@@ -11,7 +9,12 @@ buttons.forEach((item) => {
       let string = display.innerText.toString();
       display.innerText = string.substring(0, string.length - 1);
     } else if (display.innerText != "" && item.id == "equal") {
-      display.innerText = eval(display.innerText);
+      try {
+        display.innerText = Function('"use strict";return (' + display.innerText + ')')();
+      } catch (error) {
+        display.innerText = "Error";
+        setTimeout(() => (display.innerText = ""), 2000);
+      }
     } else if (display.innerText == "" && item.id == "equal") {
       display.innerText = "Null";
       setTimeout(() => (display.innerText = ""), 2000);
@@ -22,8 +25,9 @@ buttons.forEach((item) => {
 });
 
 const themeToggleBtn = document.querySelector(".theme-toggler");
-const calculator = document.querySelector(".calculator");
-let isDark = true;
+const calculator = document.querySelector(".calculadora");
+let isDark = calculator.classList.contains("dark");
+
 themeToggleBtn.onclick = () => {
   calculator.classList.toggle("dark");
   themeToggleBtn.classList.toggle("active");
